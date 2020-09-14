@@ -1,0 +1,25 @@
+---
+language: python
+
+env:
+  global:
+    - ROLE_NAME: cloud-dev
+  matrix:
+    - DISTRO: ubuntu-18.04
+    - DISTRO: debian-buster
+
+install:
+  - pip3 install ansible-lint
+
+before_script:
+  # Use actual Ansible Galaxy role name for the project directory.
+  - cd ../
+  - mv ansible-role-$ROLE_NAME lego963.$ROLE_NAME
+  - cd lego963.$ROLE_NAME
+
+script:
+  - ansible-lint tests/lego963.
+  - ansible-playbook tests/test.yml -i tests/inventory
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
